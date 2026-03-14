@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -75,8 +76,8 @@ func (h *DocumentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Process document in background
-	go h.ragService.ProcessDocument(r.Context(), doc.ID, filePath)
+	// Process document in background with a detached context
+	go h.ragService.ProcessDocument(context.Background(), doc.ID, filePath)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
